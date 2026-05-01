@@ -20,6 +20,7 @@ The exported files will be placed in the specified output directory (default: _s
 # ]
 # ///
 
+import shutil
 import subprocess
 from typing import List, Union
 from pathlib import Path
@@ -173,6 +174,14 @@ def _export(folder: Path, output_dir: Path, as_app: bool=False) -> List[dict]:
     ]
 
     logger.info(f"Successfully exported {len(notebook_data)} out of {len(notebooks)} files from {folder}")
+
+    # Copy any 'public' subdirectory so that files accessed via mo.notebook_location() are available
+    public_dir = folder / "public"
+    if public_dir.exists():
+        dest_public = output_dir / public_dir
+        shutil.copytree(str(public_dir), str(dest_public), dirs_exist_ok=True)
+        logger.info(f"Copied public folder from {public_dir} to {dest_public}")
+
     return notebook_data
 
 def main(
