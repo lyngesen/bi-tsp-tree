@@ -567,18 +567,15 @@ def _(G, find_tour_with_weight, mo, pareto_plot):
     value = pareto_plot.value
 
     if not value:
-        _output = mo.md("_No point selected yet._")
         P = None
+        _info = mo.md("_No point selected yet._")
     else:
-        _output = mo.md(f"""
-### Selected point data
-
-```python
-{value}
-""")
         _x = value[0]["x"]
         _y = value[0]["y"]
         P = find_tour_with_weight(G, target=(_x, _y))
+        _info = mo.md(f"**Selected:** weight={_x}, profit={_y}")
+
+    _info
     return (P,)
 
 
