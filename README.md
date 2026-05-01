@@ -1,12 +1,14 @@
-# marimo WebAssembly + GitHub Pages Template
+# Bi-TSP on Trees — Interactive Demo
 
-This template repository demonstrates how to export [marimo](https://marimo.io) notebooks to WebAssembly and deploy them to GitHub Pages.
+This repository publishes the [Bi-TSP on Trees](https://github.com/lyngesen/Bi-TSP-on-trees) project as an interactive [marimo](https://marimo.io) WebAssembly app on GitHub Pages.
 
-## 📚 Included Examples
+## 📚 Contents
 
-- `apps/charts.py`: Interactive data visualization with Altair
-- `notebooks/fibonacci.py`: Interactive Fibonacci sequence calculator
-- `notebooks/penguins.py`: Interactive data analysis with Polars and marimo
+- `apps/bi_tsp_tree.py`: Interactive Pareto-optimal subtours demo
+  - Generate rooted tree instances (configurable n, S, tree structure, weight model)
+  - Compare solution methods: full enumeration, decomposition, DP, DP + decomposition
+  - Click Pareto-front points to highlight the corresponding subtour on the tree
+  - Computational study runtime plots (dp vs dp_decomp across tree/weight types)
 
 ## 🚀 Usage
 
