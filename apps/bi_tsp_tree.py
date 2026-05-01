@@ -621,11 +621,12 @@ used in the computational study.
 
 @app.cell
 def _(go, mo):
-    _df = pd.read_csv(str(mo.notebook_location() / "public" / "res.csv"))
+    _df = pd.read_csv(mo.notebook_location() / "public" / "res.csv")
 
-    _avg = _df.groupby(["tree_type", "weight_type", "n"], as_index=False)[
-        ["dp", "dp_decomp"]
-    ].mean()
+    _avg = _df.groupby(
+        ["tree_type", "weight_type", "n"],
+        as_index=False
+    )[["dp", "dp_decomp"]].mean()
 
     _tree_types = sorted(_avg["tree_type"].unique())
     _weight_types = sorted(_avg["weight_type"].unique())
@@ -639,33 +640,46 @@ def _(go, mo):
         rows=len(_tree_types),
         cols=len(_weight_types),
         shared_xaxes=True,
-        shared_yaxes=False,
-        horizontal_spacing=0.05,
         vertical_spacing=0.08,
-        subplot_titles=[f"{t} | {w}" for t in _tree_types for w in _weight_types],
+        horizontal_spacing=0.05,
+        subplot_titles=[
+            f"{t} | {w}"
+            for t in _tree_types
+            for w in _weight_types
+        ],
     )
 
     for _i, _tree in enumerate(_tree_types, start=1):
         for _j, _weight in enumerate(_weight_types, start=1):
-            _sub = _avg[(_avg["tree_type"] == _tree) & (_avg["weight_type"] == _weight)]
+            _sub = _avg[
+                (_avg["tree_type"] == _tree) &
+                (_avg["weight_type"] == _weight)
+            ]
             if _sub.empty:
                 continue
+
             _fig.add_trace(
                 go.Scatter(
-                    x=_sub["n"], y=_sub["dp"], mode="lines+markers", name="dp",
+                    x=_sub["n"],
+                    y=_sub["dp"],
+                    mode="lines+markers",
+                    name="dp",
                     line=dict(dash="dash", color=_method_colors["dp"]),
-                    marker=dict(size=6, color=_method_colors["dp"]),
-                    showlegend=(_i == 1 and _j == 1),
+                    marker=dict(size=6),
+                    showlegend=_i == 1 and _j == 1,
                 ),
                 row=_i, col=_j,
             )
+
             _fig.add_trace(
                 go.Scatter(
-                    x=_sub["n"], y=_sub["dp_decomp"], mode="lines+markers",
+                    x=_sub["n"],
+                    y=_sub["dp_decomp"],
+                    mode="lines+markers",
                     name="dp_decomp",
-                    line=dict(dash="solid", color=_method_colors["dp_decomp"]),
-                    marker=dict(size=6, color=_method_colors["dp_decomp"]),
-                    showlegend=(_i == 1 and _j == 1),
+                    line=dict(color=_method_colors["dp_decomp"]),
+                    marker=dict(size=6),
+                    showlegend=_i == 1 and _j == 1,
                 ),
                 row=_i, col=_j,
             )
@@ -674,14 +688,15 @@ def _(go, mo):
         title="Runtime vs n (averaged over S)",
         height=300 * len(_tree_types),
         width=350 * len(_weight_types),
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        legend=dict(
+            orientation="h", y=1.02, x=1, xanchor="right"
+        ),
     )
+
     _fig.update_xaxes(title_text="n")
     _fig.update_yaxes(title_text="Runtime (seconds)", type="log")
 
-    mo.ui.plotly(_fig)
-    return
-
+    return mo.ui.plotly(_fig)
 
 @app.cell
 def _(mo):
